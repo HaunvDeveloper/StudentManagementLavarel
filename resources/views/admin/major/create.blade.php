@@ -1,0 +1,72 @@
+@extends('layouts.app')
+@section('title', 'Danh sách ngành học') 
+
+
+@section('links')
+<link rel="stylesheet" href="~/assets/css/course.css">
+@endsection
+
+@section('content')
+<div class="container">
+    <form action="{{ route('admin.major.create.post') }}" method="post" class="table-container m-4">
+        @csrf
+        <h4 class="text-center mb-4 mt-2 text-danger" style="font-size:30px;font-weight:bold;">TẠO NGÀNH HỌC</h4>
+        <div class="form-group">
+            <label for="code">Mã ngành</label>
+            <input id="code" name="code" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="name">Tên ngành</label>
+            <input name="name" id="name" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="dept_id">Khoa</label>
+            <select name="dept_id" id="dept_id" class="form-control select2">
+                @foreach ($departments as $department)
+                    <option value="{{ $department->Id }}">{{ $department->Name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="text-lg-end mt-2">
+            <a href="{{ route('admin.major.index') }}" class="btn btn-outline-secondary">Quay lại</a>
+            <button type="reset" class="btn btn-outline-success">Đặt lại</button>
+            <button type="submit" class="btn btn-primary">Tạo</button>
+        </div>
+        <div class="text-danger mt-2">{{$alert ?? ""}}</div>
+    </form>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+    $('.select2').select2({
+        placeholder: "Chọn ngành học",
+    });
+    $('form').submit(function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: '{{ route("admin.major.create.post") }}',
+            method: 'post',
+            data: formData,
+            contentType: false, 
+            processData: false, 
+            success: function (response) {
+                if (response.success) {
+                    showAlert("success", "Tạo thành công");
+                    setTimeout(function () {
+                        window.location.href = response.redirect;
+                    }, 1500);
+                } else {
+                    showAlert("error", response.error);
+                }
+            },
+            error: function () {
+                showAlert("error", "Có lỗi xảy ra khi gửi yêu cầu.");
+            }
+        });
+    });
+</script>
+@endsection
