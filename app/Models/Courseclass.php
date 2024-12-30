@@ -44,7 +44,7 @@ class Courseclass extends Model
 {
 	protected $table = 'courseclass';
 	protected $primaryKey = 'Id';
-	public $incrementing = false;
+	public $incrementing = true;
 	public $timestamps = false;
 
 	protected $casts = [
@@ -74,7 +74,8 @@ class Courseclass extends Model
 		'LecturerId',
 		'SubjectId',
 		'StudentClassId',
-		'DefaultRoomId'
+		'DefaultRoomId',
+		'lessons'
 	];
 
 	public function semester()

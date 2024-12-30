@@ -35,7 +35,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a asp-action="Index" asp-controller="Curriculum" asp-area="Admin" class="nav-link ">
+        <a href="{{route('admin.curriculum.index')}}" class="nav-link ">
             <i class="nav-icon bi bi-list-task"></i>
             <p>Chương trình đào tạo</p>
         </a>
@@ -43,14 +43,14 @@
 
     <li class="nav-header">Học phần</li>
     <li class="nav-item">
-        <a asp-action="Index" asp-controller="CourseClass" asp-area="Admin" class="nav-link">
+        <a href="{{route('admin.courseclass.index')}}" class="nav-link">
             <i class="nav-icon bi bi-grid"></i>
             <p>Lớp học phần</p>
         </a>
     </li>
     <li class="nav-header">Sinh viên</li>
     <li class="nav-item">
-        <a asp-action="Index" asp-controller="Student" asp-area="Admin" class="nav-link">
+        <a href="{{route('admin.student.index')}}" class="nav-link">
             <i class="nav-icon bi bi-people-fill"></i>
             <p>Sinh viên</p>
         </a>

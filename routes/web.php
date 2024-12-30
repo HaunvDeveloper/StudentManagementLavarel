@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LecturerController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -25,6 +26,40 @@ Route::group(['middleware' => 'web'], function () {
 
 // Đăng xuất
 Route::get('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth');
+
+
+
+// LECTURER
+Route::get('/lecturer', [LecturerController::class, 'dashboard'])->name('lecturer.dashboard')->middleware('auth');
+
+Route::get('/lecturer/schedules', [LecturerController::class, 'schedules'])->name('lecturer.schedules')->middleware('auth');
+
+Route::get('/lecturer/getWeekBySemester', [LecturerController::class, 'getWeekBySemester'])->name('lecturer.getWeekBySemester')->middleware('auth');
+
+Route::get('/lecturer/getSchedules', [LecturerController::class, 'getSchedules'])->name('lecturer.getSchedules')->middleware('auth');
+
+
+Route::get('/lecturer/index', [LecturerController::class, 'index'])->name('lecturer.index')->middleware('auth');
+
+Route::get('/lecturer/getListClass', [LecturerController::class, 'getListClass'])->name('lecturer.getListClass')->middleware('auth');
+
+Route::get('/lecturer/viewStudentList/{id}', [LecturerController::class, 'viewStudentList'])->name('lecturer.viewStudentList')->middleware('auth');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // ADMIN KHOA
@@ -95,20 +130,82 @@ Route::delete('/admin/subject/destroy/{id}', [AdminController::class, 'subject_d
 
 //ADMIN CURRICULUM
 Route::get('/admin/curriculum/index', [AdminController::class, 'curriculum_index'])->name('admin.curriculum.index')->middleware('auth');
+Route::get('/admin/curriculum/getList', [AdminController::class, 'curriculum_getList'])->name('admin.curriculum.getList')->middleware('auth');
+
+
 
 Route::get('/admin/curriculum/create', [AdminController::class, 'curriculum_create'])->name('admin.curriculum.create')->middleware('auth');
-Route::post('/admin/curriculum/create', [AdminController::class, 'curriculum_createpost'])->name('admin.curriculum.create.post')->middleware('auth');
+Route::post('/admin/curriculum/create', [AdminController::class, 'curriculum_store'])->name('admin.curriculum.store')->middleware('auth');
 
 
-Route::get('/admin/curriculum/{id}/edit', [AdminController::class, 'curriculum_edit'])->name('admin.curriculum.edit')->middleware('auth');
-Route::put('/admin/curriculum/update/{id}', [AdminController::class, 'curriculum_update'])->name('admin.curriculum.update')->middleware('auth');
+Route::get('/admin/curriculum/{id}/edit', [AdminController::class, 'curriculum_editCourses'])->name('admin.curriculum.editCourses')->middleware('auth');
+Route::put('/admin/curriculum/update/{id}', [AdminController::class, 'curriculum_updateCourses'])->name('admin.curriculum.update')->middleware('auth');
+
+Route::get('/admin/curriculum/details/{id}', [AdminController::class, 'curriculum_details'])->name('admin.curriculum.details')->middleware('auth');
+Route::get('/admin/getsubject/{id}', [AdminController::class, 'getSubject'])->name('admin.getsubject')->middleware('auth');
 
 
 Route::get('/admin/curriculum/{id}/delete/', [AdminController::class, 'curriculum_delete'])->name('admin.curriculum.delete')->middleware('auth');
 Route::delete('/admin/curriculum/destroy/{id}', [AdminController::class, 'curriculum_destroy'])->name('admin.curriculum.destroy');
 
 
+//ADMIN COURSE CLASS
 
+Route::get('/admin/courseclass/index', [AdminController::class, 'courseclass_index'])->name('admin.courseclass.index')->middleware('auth');
+Route::get('/admin/courseclass/getList', [AdminController::class, 'getListClass'])->name('admin.courseclass.getListClass')->middleware('auth');
+
+
+Route::get('/admin/courseclass/create', [AdminController::class, 'courseclass_create'])->name('admin.courseclass.create')->middleware('auth');
+Route::post('/admin/courseclass/store', [AdminController::class, 'courseclass_store'])->name('admin.courseclass.store')->middleware('auth');
+
+
+Route::get('/admin/courseclass/createWithList', [AdminController::class, 'courseclass_createWithList'])->name('admin.courseclass.createWithList')->middleware('auth');
+Route::post('/admin/courseclass/storeWithList', [AdminController::class, 'courseclass_storeWithList'])->name('admin.courseclass.storeWithList')->middleware('auth');
+Route::get('/admin/courseclass/download-excel-template', [AdminController::class, 'courseclass_downloadExcelFile'])->name('admin.courseclass.downloadExcelTemplate');
+
+Route::get('/admin/courseclass/viewStudentList/{id}', [AdminController::class, 'viewStudentList'])->name('admin.courseclass.viewStudentList')->middleware('auth');
+
+Route::get('/admin/courseclass/{id}/edit', [AdminController::class, 'courseclass_edit'])->name('admin.courseclass.edit')->middleware('auth');
+Route::put('/admin/courseclass/update/{id}', [AdminController::class, 'courseclass_update'])->name('admin.courseclass.update')->middleware('auth');
+
+Route::delete('/admin/courseclass/destroy/{id}', [AdminController::class, 'courseclass_destroy'])->name('admin.courseclass.destroy');
+
+Route::get('/admin/courseclass/downloadImportStudentList', [AdminController::class, 'downloadImportStudentList'])->name('admin.courseclass.downloadImportStudentList')->middleware('auth');
+Route::get('/admin/courseclass/importStudentList/{id}', [AdminController::class, 'importStudentList'])->name('admin.courseclass.importStudentList')->middleware('auth');
+Route::post('/admin/courseclass/storeStudentList', [AdminController::class, 'storeImportedStudentList'])->name('admin.courseclass.storeImportedStudentList')->middleware('auth');
+Route::get('/admin/courseclass/exportStudentList/{id}', [AdminController::class, 'exportStudentList'])->name('admin.courseclass.exportStudentList')->middleware('auth');
+Route::delete('/admin/courseclass/removeStudent/{id}', [AdminController::class, 'removeStudent'])->name('admin.courseclass.removeStudent')->middleware('auth');
+
+Route::get('/api/get-student-by-id', [AdminController::class, 'getStudentById'])->name('admin.getStudentById')->middleware('auth');
+Route::post('/admin/courseclass/addstudent', [AdminController::class, 'addStudentToClass'])->name('admin.courseclass.addStudent')->middleware('auth');
+
+
+
+Route::get('/admin/getsemesterbyyearid/{id}', [AdminController::class, 'GetSemesterByYearDetail'])->name('admin.getsemesterbyyearid')->middleware('auth');
+
+Route::get('/api/GetNewCodeCourseClass', [AdminController::class, 'getNewCodeCourseClass']);
+
+
+// ADMIN STUDENT
+
+Route::get('/admin/student/index', [AdminController::class, 'student_index'])->name('admin.student.index')->middleware('auth');
+
+Route::get('/admin/student/create', [AdminController::class, 'student_create'])->name('admin.student.create')->middleware('auth');
+Route::get('/admin/student/createWithList', [AdminController::class, 'student_createWithList'])->name('admin.student.createWithList')->middleware('auth');
+Route::get('/admin/student/downloadList', [AdminController::class, 'student_downloadList'])->name('admin.student.downloadList')->middleware('auth');
+Route::get('/admin/student/downloadExcelFile', [AdminController::class, 'student_downloadExcelFile'])->name('admin.student.downloadExcelFile')->middleware('auth');
+Route::post('/admin/student/getList', [AdminController::class, 'student_getList'])->name('admin.student.getList')->middleware('auth');
+Route::get('/api/specializations/byDept', [AdminController::class, 'getSpecializationByDept'])->name('api.specializations.byDept')->middleware('auth');
+
+
+Route::post('/admin/student/storeWithList', [AdminController::class, 'student_storeWithList'])->name('admin.student.storeWithList')->middleware('auth');
+
+
+Route::get('/admin/student/{id}/edit', [AdminController::class, 'student_edit'])->name('admin.student.edit')->middleware('auth');
+Route::put('/admin/student/update/{id}', [AdminController::class, 'student_update'])->name('admin.student.update')->middleware('auth');
+
+
+Route::delete('/admin/student/destroy/{id}', [AdminController::class, 'student_destroy'])->name('admin.student.destroy')->middleware('auth');
 
 
 Route::get('/profile', [UserController::class, 'profile'])->name('profile');

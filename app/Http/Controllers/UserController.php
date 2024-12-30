@@ -53,10 +53,9 @@ class UserController extends Controller
         session(['AuthId' => $user->AuthId]);
         session(['AuthCode' => $user->authentication->Code ?? null]);
         session(['AuthName' => $user->authentication->Name ?? null]);
-        // Trả về phản hồi thành công
         return response()->json([
             'success' => true,
-            'redirect_url' => route('admin.dashboard') // URL sau khi đăng nhập thành công
+            'redirect_url' => route($user->authentication->Code . '.dashboard') // URL sau khi đăng nhập thành công
         ]);
     }
 

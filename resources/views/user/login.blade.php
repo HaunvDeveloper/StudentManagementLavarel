@@ -80,6 +80,9 @@
                 Username: $('#Username').val(),
                 Password: $('#Password').val()
             },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             success: function (response) {
                 if (response.success) {
                     window.location.href = response.redirect_url;

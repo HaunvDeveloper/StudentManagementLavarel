@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $RoomId
  * 
  * @property Lessoninfo $lessoninfo
+ * @property Lessoninfo $lessoninfo2
  * @property Courseclass $courseclass
  * @property Room|null $room
  * @property Collection|Device[] $devices
@@ -53,6 +54,11 @@ class Lesson extends Model
 	];
 
 	public function lessoninfo()
+	{
+		return $this->belongsTo(Lessoninfo::class, 'StartLesson');
+	}
+
+	public function lessoninfo2()
 	{
 		return $this->belongsTo(Lessoninfo::class, 'EndLesson');
 	}
