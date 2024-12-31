@@ -22,7 +22,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a asp-action="ListTime" asp-controller="CourseClass" asp-area="Lecturer" class="nav-link">
+        <a  href="{{route('lecturer.listTime')}}" class="nav-link">
             <i class="nav-icon bi bi-people-fill"></i>
             <p>Tổng hợp giờ giảng dạy</p>
         </a>
@@ -30,7 +30,7 @@
     
     <li class="nav-header">CHỨC NĂNG TRỰC TUYẾN</li>
     <li class="nav-item">
-        <a asp-action="Index" asp-controller="Attendance" asp-area="Lecturer" class="nav-link">
+        <a href="{{route('lecturer.attendance')}}" class="nav-link">
             <i class="nav-icon bi bi-grid"></i>
             <p>Điểm danh Online</p>
         </a>

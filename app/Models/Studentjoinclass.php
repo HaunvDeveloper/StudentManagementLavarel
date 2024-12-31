@@ -48,6 +48,6 @@ class Studentjoinclass extends Model
 
 	public function student()
 	{
-		return $this->belongsTo(Student::class, 'StudentId');
+		return $this->belongsTo(Student::class, 'StudentId', 'Id');
 	}
 }

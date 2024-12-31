@@ -3,7 +3,7 @@
 @section('title', 'Danh sách lớp học phần')
 
 @section('links')
-<link rel="stylesheet" href="{{ asset('assets/css/course.css') }}">
+<link rel="stylesheet" href="{{ asset('css/course.css') }}">
 @endsection
 
 @section('content')
@@ -38,11 +38,10 @@
                     </select>
                 </div>
             </div>
-            <div></div>
         </div>
 
         <div class="table-data table-responsive">
-            <!-- Nội dung bảng danh sách lớp học phần sẽ được hiển thị ở đây -->
+            <!-- Table data will be dynamically loaded here -->
         </div>
     </div>
 </div>
@@ -50,21 +49,45 @@
 
 @section('scripts')
 <script>
+    function showLesson(courseClassId, element) {
+        var isPick = $(element).attr('data-pick');
+        if (isPick === "0") {
+            $(element).attr('data-pick', '1');
+            $.ajax({
+                url: '{{ route("lecturer.getListLesson") }}',
+                method: 'GET',
+                data: { courseClassId: courseClassId },
+                success: function (response) {
+                    var tr = document.createElement('tr');
+                    $(tr).html(`
+                        <td colspan="7">
+                        ${response}
+                        </td>
+                    `);
+                    $(element).closest('tr').after(tr);
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        } else {
+            $(element).attr('data-pick', '0');
+            $(element).closest('tr').next('tr').remove();
+        }
+    }
+
     $(document).ready(function () {
         $('#SemesterId').on('change', function () {
             $('.table-data').html('');
             $.ajax({
-                url: '{{ route("lecturer.getListClass") }}',
+                url: '{{ route("lecturer._getListTime") }}',
                 method: 'GET',
-                data: { 
-                    yearDetailId: $('#StudyYearDetailId').val(), 
-                    semesterId: $('#SemesterId').val() 
-                },
+                data: { semesterId: $('#SemesterId').val() },
                 success: function (response) {
                     $('.table-data').html(response);
                 },
                 error: function (err) {
-                    $('.table-data').html('<div class="alert alert-danger">Không thể tải dữ liệu</div>');
+                    console.error(err);
                 }
             });
         });
@@ -76,18 +99,18 @@
                     url: '{{ url("/admin/getsemesterbyyearid") }}/' + yearId,
                     type: 'GET',
                     success: function (data) {
-                        if (data && data.length > 0) {
+                        if (data.length > 0) {
                             var semesterSelect = $('#SemesterId');
                             semesterSelect.empty();
                             var now = new Date();
 
-                            $.each(data, function (index, item) {
+                            data.forEach(function (item) {
                                 var startDate = new Date(item.startDate);
                                 var endDate = new Date(item.endDate);
                                 var isSelected = now >= startDate && now <= endDate ? ' selected' : '';
-
-                                semesterSelect.append('<option value="' + item.Id + '"' + isSelected + '>' + item.Name + '</option>');
+                                semesterSelect.append(`<option value="${item.Id}"${isSelected}>${item.Name}</option>`);
                             });
+
                             $('#SemesterId').trigger('change');
                         }
                     },

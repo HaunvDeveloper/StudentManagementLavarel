@@ -46,11 +46,20 @@ Route::get('/lecturer/getListClass', [LecturerController::class, 'getListClass']
 Route::get('/lecturer/viewStudentList/{id}', [LecturerController::class, 'viewStudentList'])->name('lecturer.viewStudentList')->middleware('auth');
 
 
+Route::get('/lecturer/attendance', [LecturerController::class, 'attendance_index'])->name('lecturer.attendance')->middleware('auth');
+Route::get('/lecturer/_attendance', [LecturerController::class, 'attendance_getListStudent'])->name('partial.lecturer.getListStudent')->middleware('auth');
+
+Route::get('/api/lecturer/activate', [LecturerController::class, 'attendance_activate'])->name('api.lecturer.activate')->middleware('auth');
+Route::get('/api/lecturer/getLessons', [LecturerController::class, 'attendance_getLessons'])->name('api.lecturer.getLessons')->middleware('auth');
+Route::get('/api/lecturer/getClasses', [LecturerController::class, 'attendance_getClasses'])->name('api.lecturer.getClasses')->middleware('auth');
+
+Route::post('/lecturer/attendance/save', [LecturerController::class, 'attendance_save'])->name('lecturer.attendance.save')->middleware('auth');
 
 
 
-
-
+Route::get('/lecturer/list-time', [LecturerController::class, 'listTime'])->name('lecturer.listTime');
+Route::get('/lecturer/get-list-time', [LecturerController::class, '_getListTime'])->name('lecturer._getListTime');
+Route::get('/lecturer/get-list-lesson', [LecturerController::class, 'getListLesson'])->name('lecturer.getListLesson');
 
 
 
