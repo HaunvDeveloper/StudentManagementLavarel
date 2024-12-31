@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\AddressAPIController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\FaceRecognitionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -28,6 +32,35 @@ Route::group(['middleware' => 'web'], function () {
 Route::get('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth');
 
 
+Route::get('/student', [StudentController::class, 'dashboard'])->name('student.dashboard')->middleware('auth');
+Route::post('/student/getChartData', [StudentController::class, 'getChartData'])->name('student.getChartData')->middleware('auth');
+
+
+Route::get('/student/info', [StudentController::class, 'info'])->name('student.info')->middleware('auth');
+Route::get('/student/editInfo', [StudentController::class, 'editInfo'])->name('student.editInfo')->middleware('auth');
+Route::post('/student/updateInfo', [StudentController::class, 'updateInfo'])->name('student.updateInfo')->middleware('auth');
+
+Route::get('/student/course/list', [StudentController::class, 'listCourse'])->name('student.course.list')->middleware('auth');
+Route::get('/student/course/info/{id}', [StudentController::class, 'courseInfo'])->name('student.course.info')->middleware('auth');
+
+Route::get('/student/schedules', [StudentController::class, 'schedules'])->name('student.schedules')->middleware('auth');
+
+Route::get('/student/getSchedules', [StudentController::class, 'getSchedules'])->name('student.getSchedules')->middleware('auth');
+
+Route::get('/student/faceRegister', [FaceRecognitionController::class, 'createFaceIdentify'])->name('student.createFaceIdentify')->middleware('auth');
+Route::post('/face/checkposition', [FaceRecognitionController::class, 'checkFacePosition'])->name('face.checkposition')->middleware('auth');
+Route::post('/face/register', [FaceRecognitionController::class, 'registerUser'])->name('face.register')->middleware('auth');
+
+Route::get('/device', [DeviceController::class, 'index'])->name('attendance.dashboard')->middleware('auth');
+Route::get('/device/check', [DeviceController::class, 'checkActivate'])->name('device.checkActivate')->middleware('auth');
+Route::post('/device/verify', [DeviceController::class, 'verify'])->name('device.verify')->middleware('auth');
+
+
+Route::get('/api/address/provinces', [AddressAPIController::class, 'provinces']);
+Route::get('/api/address/districts/{id}', [AddressAPIController::class, 'districts']);
+Route::get('/api/address/wards/{id}', [AddressAPIController::class, 'wards']);
+
+
 
 // LECTURER
 Route::get('/lecturer', [LecturerController::class, 'dashboard'])->name('lecturer.dashboard')->middleware('auth');
@@ -49,7 +82,7 @@ Route::get('/lecturer/viewStudentList/{id}', [LecturerController::class, 'viewSt
 Route::get('/lecturer/attendance', [LecturerController::class, 'attendance_index'])->name('lecturer.attendance')->middleware('auth');
 Route::get('/lecturer/_attendance', [LecturerController::class, 'attendance_getListStudent'])->name('partial.lecturer.getListStudent')->middleware('auth');
 
-Route::get('/api/lecturer/activate', [LecturerController::class, 'attendance_activate'])->name('api.lecturer.activate')->middleware('auth');
+Route::post('/api/lecturer/activate', [LecturerController::class, 'attendance_activate'])->name('api.lecturer.activate')->middleware('auth');
 Route::get('/api/lecturer/getLessons', [LecturerController::class, 'attendance_getLessons'])->name('api.lecturer.getLessons')->middleware('auth');
 Route::get('/api/lecturer/getClasses', [LecturerController::class, 'attendance_getClasses'])->name('api.lecturer.getClasses')->middleware('auth');
 

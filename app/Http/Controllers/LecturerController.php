@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Courseclass;
+use App\Models\Device;
 use App\Models\Lecturer;
 use App\Models\Lesson;
 use App\Models\Semester;
@@ -174,7 +175,43 @@ class LecturerController extends Controller
         }
     }
 
+    public function attendance_activate(Request $request)
+    {
+        $active = $request->input('active');
+        $lessonId = $request->input('lessonId');
 
+        try {
+            // Tìm Lesson theo lessonId
+            $lesson = Lesson::find($lessonId);
+            if (!$lesson) {
+                return response()->json(['success' => false, 'error' => 'Lesson not found'], 404);
+            }
+
+            // Tìm Device theo RoomId của Lesson
+            $device = Device::where('RoomId', $lesson->RoomId)->first();
+            if (!$device) {
+                return response()->json(['success' => false, 'error' => 'No device found for the room'], 404);
+            }
+
+            // Cập nhật trạng thái Device
+            if ($active) {
+                $device->LessonId = $lessonId;
+                $device->CourseClassId = $lesson->CourseClassId;
+                $device->IsActive = true;
+            } else {
+                $device->LessonId = null;
+                $device->CourseClassId = null;
+                $device->IsActive = false;
+            }
+
+            // Lưu thay đổi
+            $device->save();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'error' => $ex->getMessage()], 500);
+        }
+    }
 
 
 
